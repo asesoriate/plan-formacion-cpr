@@ -670,7 +670,12 @@ function filaDetalle(id, a) {
   const tr = document.createElement('tr');
   tr.className = 'fila-detalle oculta';
   tr.dataset.id = id;
-  const sesionesTxt = Array.isArray(a.sesiones) && a.sesiones.length ? a.sesiones.join(', ') : '—';
+  const sesionesTxt = Array.isArray(a.sesiones) && a.sesiones.length
+    ? a.sesiones.map((s, i) => {
+        if (typeof s === 'string') return `Sesión ${i+1}: ${s}`;
+        return `Sesión ${i+1}: ${s.fecha || '—'} de ${s.horaInicio || '?'} a ${s.horaFin || '?'}`;
+      }).join('<br>')
+    : '—';
   const contactosTxt = Array.isArray(a.contactos) && a.contactos.length
     ? a.contactos.map(c => {
         if (typeof c === 'string') return c; // compatibilidad con datos antiguos
@@ -754,17 +759,23 @@ function diaSiguiente(dateStr) {
   return d.toISOString().slice(0, 10);
 }
 
-async function crearOActualizarEvento(token, existing, titulo, fecha, descripcion) {
-  const body = {
-    summary: titulo,
-    description: descripcion,
-    start: { date: ymd(fecha) },
-    end: { date: diaSiguiente(fecha) }
-  };
+async function crearOActualizarEvento(token, existing, titulo, fecha, descripcion, horaInicio = null, horaFin = null) {
+  // Si tiene hora → evento con dateTime; si no → evento de día completo (date)
+  let start, end;
+  if (horaInicio) {
+    // Construimos en hora local (sin Z para que Google lo interprete en la zona horaria de la cuenta)
+    start = { dateTime: `${fecha}T${horaInicio}:00`, timeZone: 'Europe/Madrid' };
+    end   = { dateTime: `${fecha}T${horaFin || horaInicio}:00`, timeZone: 'Europe/Madrid' };
+  } else {
+    start = { date: fecha };
+    end   = { date: diaSiguiente(fecha) };
+  }
+
+  const body = { summary: titulo, description: descripcion, start, end };
 
   if (existing && existing.id) {
-    // Si la fecha no cambió, solo actualizamos título/descripción
-    if (existing.date === fecha) {
+    const mismaFecha = existing.date === fecha && existing.horaInicio === (horaInicio || '');
+    if (mismaFecha) {
       const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${existing.id}`, {
         method: 'PATCH',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -772,15 +783,13 @@ async function crearOActualizarEvento(token, existing, titulo, fecha, descripcio
       });
       if (res.ok) {
         const data = await res.json();
-        return { id: data.id, date: fecha };
+        return { id: data.id, date: fecha, horaInicio: horaInicio || '' };
       }
-      // si falla (p.ej. evento borrado a mano), seguimos abajo para recrearlo
     } else {
-      // la fecha cambió: borramos el evento antiguo y creamos uno nuevo
       await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${existing.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
-      });
+      }).catch(() => {});
     }
   }
 
@@ -791,7 +800,7 @@ async function crearOActualizarEvento(token, existing, titulo, fecha, descripcio
   });
   if (!res.ok) throw new Error('Error creando evento: ' + res.status);
   const data = await res.json();
-  return { id: data.id, date: fecha };
+  return { id: data.id, date: fecha, horaInicio: horaInicio || '' };
 }
 
 async function borrarEventoPorClave(token, map, key) {
@@ -850,14 +859,23 @@ async function sincronizarActividad(id, a, btnEl) {
       }
 
       // Sesiones (o fallback a inicioActividad si no hay sesiones)
-      let sesiones = Array.isArray(a.sesiones) ? a.sesiones.filter(Boolean) : [];
-      if (sesiones.length === 0 && a.inicioActividad) sesiones = [a.inicioActividad];
+      let sesiones = Array.isArray(a.sesiones) ? a.sesiones.filter(s => s && (typeof s === 'string' ? s : s.fecha)) : [];
+      if (sesiones.length === 0 && a.inicioActividad) sesiones = [{ fecha: a.inicioActividad, horaInicio: '09:00', horaFin: '14:00' }];
 
       const clavesVistas = {};
       for (let i = 0; i < sesiones.length; i++) {
         const key = `SESION_${i + 1}`;
         clavesVistas[key] = true;
-        map[key] = await crearOActualizarEvento(token, map[key], `🔔 Sesión ${i + 1} – ${nombre}`, sesiones[i], descripcion);
+        const s = typeof sesiones[i] === 'string'
+          ? { fecha: sesiones[i], horaInicio: null, horaFin: null }
+          : sesiones[i];
+        map[key] = await crearOActualizarEvento(
+          token, map[key],
+          `🔔 Sesión ${i + 1} – ${nombre}`,
+          s.fecha, descripcion,
+          s.horaInicio || null,
+          s.horaFin || null
+        );
       }
       // borrar sesiones sobrantes de una sincronización anterior
       for (const key of Object.keys(map)) {
@@ -894,18 +912,27 @@ async function sincronizarActividad(id, a, btnEl) {
 
 // ====================== MODAL / FORMULARIO ======================
 
-function filaItemDinamico(valor, tipo, placeholder) {
+function filaSesion(sesion = {}) {
+  // sesion puede ser un string (fecha) por compatibilidad antigua, o un objeto {fecha, horaInicio, horaFin}
+  const fecha = typeof sesion === 'string' ? sesion : (sesion.fecha || '');
+  const horaInicio = typeof sesion === 'object' ? (sesion.horaInicio || '09:00') : '09:00';
+  const horaFin = typeof sesion === 'object' ? (sesion.horaFin || '14:00') : '14:00';
+
   const row = document.createElement('div');
-  row.className = 'item-row';
+  row.className = 'item-row sesion-row';
+  row.style.flexWrap = 'wrap';
   row.innerHTML = `
-    <input type="${tipo}" value="${valor || ''}" placeholder="${placeholder || ''}">
+    <input type="date" class="s-fecha" value="${fecha}" style="flex:1.5; min-width:130px;">
+    <div style="display:flex;align-items:center;gap:4px;flex:1;min-width:180px;">
+      <input type="time" class="s-inicio" value="${horaInicio}" style="flex:1;">
+      <span style="color:#6b7280;font-size:0.8rem;">→</span>
+      <input type="time" class="s-fin" value="${horaFin}" style="flex:1;">
+    </div>
     <button type="button" class="btn-mini quitar">Quitar</button>
   `;
   row.querySelector('.quitar').addEventListener('click', () => row.remove());
   return row;
-}
-
-function filaContacto(contacto = {}) {
+}(contacto = {}) {
   const row = document.createElement('div');
   row.className = 'item-row contacto-row';
   row.style.flexWrap = 'wrap';
@@ -921,7 +948,7 @@ function filaContacto(contacto = {}) {
 }
 
 addSesionBtn.addEventListener('click', () => {
-  listaSesiones.appendChild(filaItemDinamico('', 'date'));
+  listaSesiones.appendChild(filaSesion());
 });
 addContactoBtn.addEventListener('click', () => {
   listaContactos.appendChild(filaContacto());
@@ -959,7 +986,7 @@ function abrirModal(id = null, datos = null) {
     formActividad.actaFinal.checked = !!datos.actaFinal;
     formActividad.firmasPonente.checked = !!datos.firmasPonente;
 
-    (datos.sesiones || []).forEach(s => listaSesiones.appendChild(filaItemDinamico(s, 'date')));
+    (datos.sesiones || []).forEach(s => listaSesiones.appendChild(filaSesion(s)));
     (datos.contactos || []).forEach(c => listaContactos.appendChild(filaContacto(c)));
   }
 
@@ -981,7 +1008,11 @@ formActividad.addEventListener('submit', async (e) => {
   if (!window.usuarioActual) return;
 
   const fd = new FormData(formActividad);
-  const sesiones = Array.from(listaSesiones.querySelectorAll('input')).map(i => i.value).filter(Boolean);
+  const sesiones = Array.from(listaSesiones.querySelectorAll('.sesion-row')).map(row => ({
+    fecha: row.querySelector('.s-fecha').value,
+    horaInicio: row.querySelector('.s-inicio').value,
+    horaFin: row.querySelector('.s-fin').value
+  })).filter(s => s.fecha);
   const contactos = Array.from(listaContactos.querySelectorAll('.contacto-row')).map(row => ({
     nombre: row.querySelector('.c-nombre').value.trim(),
     telefono: row.querySelector('.c-telefono').value.trim(),
