@@ -537,15 +537,20 @@ function mostrarToast(msg) {
   setTimeout(() => toast.classList.remove('visible'), 2600);
 }
 
-// === Login con Google ===
+// === Login con Google (con permiso de Calendar) ===
 loginBtn.addEventListener('click', async () => {
   ocultarError();
   spinner.classList.add('visible');
   loginBtn.disabled = true;
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ hd: 'educarex.es' });
+  provider.addScope('https://www.googleapis.com/auth/calendar.events');
   try {
-    await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    if (credential && credential.accessToken) {
+      window.googleAccessToken = credential.accessToken;
+    }
   } catch (err) {
     spinner.classList.remove('visible');
     loginBtn.disabled = false;
@@ -647,6 +652,7 @@ function filaActividad(id, a) {
     <td>${estadoPill(a)}</td>
     <td>
       <div class="acciones-fila">
+        <button class="icon-btn" data-sync="${id}" title="Sincronizar con mi calendario">📅</button>
         <button class="icon-btn" data-editar="${id}" title="Editar actividad">✏️</button>
         <button class="icon-btn peligro" data-borrar="${id}" title="Eliminar actividad">🗑</button>
       </div>
@@ -685,6 +691,7 @@ function filaDetalle(id, a) {
         <div class="campo"><span class="label">Inicio de actividad</span>${a.inicioActividad || '—'}</div>
         <div class="campo"><span class="label">Sesiones</span>${sesionesTxt}</div>
         <div class="campo"><span class="label">Añadida al calendario</span>${a.addToCal ? 'Sí' : 'No'}</div>
+        <div class="campo"><span class="label">Última sincronización</span>${a.lastSync && a.lastSync.toDate ? a.lastSync.toDate().toLocaleString('es-ES') : '—'}</div>
         <div class="campo"><span class="label">Estado (texto)</span>${a.status || '—'}</div>
         <div class="campo"><span class="label">Díptico entregado</span>${a.docEntregada ? 'Sí' : 'No'}</div>
         <div class="campo"><span class="label">Evaluación de asesor</span>${a.evaluacionAsesor ? 'Sí' : 'No'}</div>
@@ -719,8 +726,171 @@ tablaBody.addEventListener('click', async (e) => {
   if (btnEditar) {
     const id = btnEditar.dataset.editar;
     abrirModal(id, actividadesCache[id]);
+    return;
+  }
+
+  const btnSync = e.target.closest('[data-sync]');
+  if (btnSync) {
+    const id = btnSync.dataset.sync;
+    sincronizarActividad(id, actividadesCache[id], btnSync);
   }
 });
+
+// ====================== SINCRONIZACIÓN CON GOOGLE CALENDAR ======================
+
+async function obtenerAccessToken() {
+  if (window.googleAccessToken) return window.googleAccessToken;
+  mostrarToast('Necesitas autorizar el acceso a tu calendario. Vuelve a iniciar sesión.');
+  return null;
+}
+
+function ymd(dateStr) {
+  // dateStr viene en formato YYYY-MM-DD desde <input type="date">
+  return dateStr;
+}
+function diaSiguiente(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + 1);
+  return d.toISOString().slice(0, 10);
+}
+
+async function crearOActualizarEvento(token, existing, titulo, fecha, descripcion) {
+  const body = {
+    summary: titulo,
+    description: descripcion,
+    start: { date: ymd(fecha) },
+    end: { date: diaSiguiente(fecha) }
+  };
+
+  if (existing && existing.id) {
+    // Si la fecha no cambió, solo actualizamos título/descripción
+    if (existing.date === fecha) {
+      const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${existing.id}`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return { id: data.id, date: fecha };
+      }
+      // si falla (p.ej. evento borrado a mano), seguimos abajo para recrearlo
+    } else {
+      // la fecha cambió: borramos el evento antiguo y creamos uno nuevo
+      await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${existing.id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+    }
+  }
+
+  const res = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error('Error creando evento: ' + res.status);
+  const data = await res.json();
+  return { id: data.id, date: fecha };
+}
+
+async function borrarEventoPorClave(token, map, key) {
+  const rec = map[key];
+  if (!rec || !rec.id) return;
+  try {
+    await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${rec.id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+  } catch (e) { /* ya no existía, no pasa nada */ }
+  delete map[key];
+}
+
+function renderDescripcionEvento(a) {
+  const contactos = Array.isArray(a.contactos) && a.contactos.length
+    ? a.contactos.map(c => typeof c === 'string' ? c : [c.nombre, c.telefono, c.email].filter(Boolean).join(' | ')).join('; ')
+    : '—';
+  return [
+    `Actividad: ${a.nombre || ''}`,
+    `Trimestre: ${a.trimestre || ''}`,
+    `Destinatarios: ${a.destinatarios || ''}`,
+    `Aula: ${a.aula || ''}`,
+    `Horas: ${a.horas || ''}`,
+    `Financiación: ${a.financiacion || ''}`,
+    `Contacto(s): ${contactos}`,
+    '',
+    'Generado desde Plan de Formación CPR Cáceres'
+  ].join('\n');
+}
+
+async function sincronizarActividad(id, a, btnEl) {
+  if (!a) { mostrarToast('No se encontró la actividad.'); return; }
+  const token = await obtenerAccessToken();
+  if (!token) return;
+
+  if (btnEl) { btnEl.disabled = true; btnEl.textContent = '⏳'; }
+
+  try {
+    const nombre = a.nombre || '(sin nombre)';
+    const descripcion = renderDescripcionEvento(a);
+    const map = { ...(a.eventIds || {}) };
+
+    if (a.addToCal) {
+      const hitos = [
+        ['INSCRIPCION_INICIO', a.inscripcionInicio, `🔔 Inicio inscripción – ${nombre}`],
+        ['INSCRIPCION_FIN', a.inscripcionFin, `🔔 Fin inscripción – ${nombre}`],
+        ['ADMITIDOS', a.publicacionAdmitidos, `🔔 Publicación de admitidos – ${nombre}`]
+      ];
+      for (const [key, fecha, titulo] of hitos) {
+        if (fecha) {
+          map[key] = await crearOActualizarEvento(token, map[key], titulo, fecha, descripcion);
+        } else if (map[key]) {
+          await borrarEventoPorClave(token, map, key);
+        }
+      }
+
+      // Sesiones (o fallback a inicioActividad si no hay sesiones)
+      let sesiones = Array.isArray(a.sesiones) ? a.sesiones.filter(Boolean) : [];
+      if (sesiones.length === 0 && a.inicioActividad) sesiones = [a.inicioActividad];
+
+      const clavesVistas = {};
+      for (let i = 0; i < sesiones.length; i++) {
+        const key = `SESION_${i + 1}`;
+        clavesVistas[key] = true;
+        map[key] = await crearOActualizarEvento(token, map[key], `🔔 Sesión ${i + 1} – ${nombre}`, sesiones[i], descripcion);
+      }
+      // borrar sesiones sobrantes de una sincronización anterior
+      for (const key of Object.keys(map)) {
+        if (key.startsWith('SESION_') && !clavesVistas[key]) {
+          await borrarEventoPorClave(token, map, key);
+        }
+      }
+    } else {
+      // Si "Sincronizar con mi calendario" está desmarcado, borramos todo lo creado antes
+      for (const key of Object.keys(map)) {
+        await borrarEventoPorClave(token, map, key);
+      }
+    }
+
+    await updateDoc(doc(db, 'actividades_plan', id), {
+      eventIds: map,
+      lastSync: serverTimestamp(),
+      status: a.addToCal ? 'Agendado' : ''
+    });
+
+    mostrarToast(a.addToCal ? 'Sincronizado con tu calendario.' : 'Eventos eliminados de tu calendario.');
+  } catch (err) {
+    console.error(err);
+    if (String(err.message || '').includes('401')) {
+      window.googleAccessToken = null;
+      mostrarToast('Tu permiso de calendario ha caducado. Cierra sesión y vuelve a entrar.');
+    } else {
+      mostrarToast('No se pudo sincronizar con el calendario.');
+    }
+  } finally {
+    if (btnEl) { btnEl.disabled = false; btnEl.textContent = '📅'; }
+  }
+}
 
 // ====================== MODAL / FORMULARIO ======================
 
