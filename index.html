@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan de Formación · CPR Cáceres</title>
+<style>
+  :root {
+    --azul: #1a3c6e;
+    --azul-claro: #2d5fa3;
+    --gris: #6b7280;
+    --fondo: #f4f6f9;
+    --error: #c0392b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    background: var(--fondo);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1f2933;
+  }
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+  }
+  .card h1 {
+    font-size: 1.3rem;
+    color: var(--azul);
+    margin-bottom: 4px;
+  }
+  .card p.subtitle {
+    color: var(--gris);
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+  }
+  #login-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 11px 22px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1f2933;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s;
+  }
+  #login-btn:hover { background: #f9fafb; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  #login-btn svg { width: 20px; height: 20px; }
+
+  #app-screen { display: none; }
+  #app-screen.visible { display: block; }
+  #login-screen.hidden { display: none; }
+
+  .badge {
+    display: inline-block;
+    background: #e8f0fe;
+    color: var(--azul);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+  .user-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+  .user-row img { width: 44px; height: 44px; border-radius: 50%; }
+  .user-row .name { font-weight: 600; font-size: 0.95rem; }
+  .user-row .email { color: var(--gris); font-size: 0.8rem; }
+
+  #logout-btn {
+    margin-top: 18px;
+    background: none;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    color: var(--gris);
+    cursor: pointer;
+  }
+  #logout-btn:hover { background: #f9fafb; }
+
+  .error-box {
+    display: none;
+    background: #fdecea;
+    border: 1px solid #f5c6c2;
+    color: var(--error);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 0.85rem;
+    margin-top: 18px;
+    text-align: left;
+    line-height: 1.4;
+  }
+  .error-box.visible { display: block; }
+
+  .spinner {
+    display: none;
+    margin: 0 auto;
+    width: 26px;
+    height: 26px;
+    border: 3px solid #e5e7eb;
+    border-top-color: var(--azul-claro);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  .spinner.visible { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- PANTALLA DE LOGIN -->
+  <div id="login-screen">
+    <div class="badge">CPR Cáceres</div>
+    <h1>Plan de Formación 26-27</h1>
+    <p class="subtitle">Accede con tu correo institucional de la asesoría</p>
+
+    <div class="spinner" id="login-spinner"></div>
+
+    <button id="login-btn">
+      <svg viewBox="0 0 48 48">
+        <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6.1 29.6 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.2-.1-2.4-.4-3.5z"/>
+        <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 18.9 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6.1 29.6 4 24 4c-7.7 0-14.3 4.4-17.7 10.7z"/>
+        <path fill="#4CAF50" d="M24 44c5.5 0 10.4-1.9 14.2-5.1l-6.6-5.4C29.6 35.4 27 36.3 24 36.3c-5.2 0-9.7-3.4-11.3-8.1l-6.5 5C9.6 39.6 16.2 44 24 44z"/>
+        <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.2-4.1 5.5l6.6 5.4C41.7 35.9 44 30.4 44 24c0-1.2-.1-2.4-.4-3.5z"/>
+      </svg>
+      Iniciar sesión con Google
+    </button>
+
+    <div class="error-box" id="error-box"></div>
+  </div>
+
+  <!-- PANTALLA TRAS LOGIN -->
+  <div id="app-screen">
+    <div class="badge">Acceso correcto</div>
+    <div class="user-row">
+      <img id="user-photo" src="" alt="">
+      <div>
+        <div class="name" id="user-name"></div>
+        <div class="email" id="user-email"></div>
+      </div>
+    </div>
+    <p class="subtitle" id="asesoria-label" style="margin-bottom:6px;"></p>
+    <p style="font-size:0.85rem; color:#6b7280;">Aquí cargaremos tu planificación de actividades.</p>
+    <button id="logout-btn">Cerrar sesión</button>
+  </div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
+// === Configuración del proyecto Firebase ===
+const firebaseConfig = {
+  apiKey: "AIzaSyCe6BomjNswI7htdh08KJ3B5s3ydJMzw1g",
+  authDomain: "cpr-caceres-plan-formacion.firebaseapp.com",
+  projectId: "cpr-caceres-plan-formacion",
+  storageBucket: "cpr-caceres-plan-formacion.firebasestorage.app",
+  messagingSenderId: "56226894337",
+  appId: "1:56226894337:web:19fb651b1822a195dca600"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// === Lista blanca de las 8 asesorías ===
+// email institucional -> nombre legible de la asesoría
+const ASESORIAS_AUTORIZADAS = {
+  "innovacion.cprcaceres@educarex.es": "Innovación Educativa",
+  "formacionencentro.cprcaceres@educarex.es": "Formación en Centros y Autoformación",
+  "asesoriafp.cprcaceres@educarex.es": "Formación Profesional y Enseñanzas de Régimen Especial",
+  "atencionaladiversidad.cprcaceres@educarex.es": "Atención a la Diversidad, Convivencia y Coeducación",
+  "desarrollocurricular.cprcaceres@educarex.es": "Desarrollo Curricular",
+  "plurilinguismo.cprcaceres@educarex.es": "Plurilingüismo",
+  "puestosespecificos.cprcaceres@educarex.es": "Ejercicio de Puestos Específicos",
+  "asesoriate.cprcaceres@educarex.es": "Tecnologías Educativas"
+};
+
+// === Elementos del DOM ===
+const loginScreen = document.getElementById('login-screen');
+const appScreen = document.getElementById('app-screen');
+const loginBtn = document.getElementById('login-btn');
+const logoutBtn = document.getElementById('logout-btn');
+const errorBox = document.getElementById('error-box');
+const spinner = document.getElementById('login-spinner');
+
+const userPhoto = document.getElementById('user-photo');
+const userName = document.getElementById('user-name');
+const userEmail = document.getElementById('user-email');
+const asesoriaLabel = document.getElementById('asesoria-label');
+
+function mostrarError(msg) {
+  errorBox.textContent = msg;
+  errorBox.classList.add('visible');
+}
+function ocultarError() {
+  errorBox.classList.remove('visible');
+}
+
+// === Login con Google ===
+loginBtn.addEventListener('click', async () => {
+  ocultarError();
+  spinner.classList.add('visible');
+  loginBtn.disabled = true;
+
+  const provider = new GoogleAuthProvider();
+  // Sugerimos cuentas del dominio educarex.es (no bloquea otras, solo orienta el selector)
+  provider.setCustomParameters({ hd: 'educarex.es' });
+
+  try {
+    await signInWithPopup(auth, provider);
+    // onAuthStateChanged se encarga del resto
+  } catch (err) {
+    spinner.classList.remove('visible');
+    loginBtn.disabled = false;
+    console.error(err);
+    mostrarError('No se pudo iniciar sesión. Inténtalo de nuevo.');
+  }
+});
+
+// === Logout ===
+logoutBtn.addEventListener('click', () => {
+  signOut(auth);
+});
+
+// === Control de sesión y validación de la lista blanca ===
+onAuthStateChanged(auth, (user) => {
+  spinner.classList.remove('visible');
+  loginBtn.disabled = false;
+
+  if (!user) {
+    appScreen.classList.remove('visible');
+    loginScreen.classList.remove('hidden');
+    return;
+  }
+
+  const email = (user.email || '').toLowerCase();
+  const asesoriaNombre = ASESORIAS_AUTORIZADAS[email];
+
+  if (!asesoriaNombre) {
+    // Email válido en Google, pero no está en la lista de las 8 asesorías
+    signOut(auth);
+    mostrarError(
+      `El correo ${user.email} no tiene acceso a esta aplicación. ` +
+      `Si crees que es un error, contacta con Tecnologías Educativas del CPR de Cáceres.`
+    );
+    return;
+  }
+
+  // Acceso correcto
+  ocultarError();
+  loginScreen.classList.add('hidden');
+  appScreen.classList.add('visible');
+
+  userPhoto.src = user.photoURL || '';
+  userName.textContent = user.displayName || '';
+  userEmail.textContent = user.email;
+  asesoriaLabel.textContent = `Asesoría: ${asesoriaNombre}`;
+
+  // Guardamos en sesión el email y la asesoría para usarlos en las siguientes fases
+  window.usuarioActual = { email: user.email, asesoria: asesoriaNombre };
+});
+</script>
+
+</body>
+</html>
