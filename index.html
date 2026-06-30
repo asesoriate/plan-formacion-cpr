@@ -24,21 +24,11 @@
   }
 
   /* ---------- LOGIN ---------- */
-  #login-screen {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  #login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
   #login-screen.hidden { display: none; }
   .card {
-    background: #fff;
-    border-radius: 14px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    padding: 40px 36px;
-    width: 100%;
-    max-width: 380px;
-    text-align: center;
+    background: #fff; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    padding: 40px 36px; width: 100%; max-width: 380px; text-align: center;
   }
   .card h1 { font-size: 1.3rem; color: var(--azul); margin-bottom: 4px; }
   .card p.subtitle { color: var(--gris); font-size: 0.9rem; margin-bottom: 28px; }
@@ -72,17 +62,10 @@
   #app-screen.visible { display: block; }
 
   header.topbar {
-    background: #fff;
-    border-bottom: 1px solid var(--borde);
-    padding: 14px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    background: #fff; border-bottom: 1px solid var(--borde); padding: 14px 28px;
+    display: flex; align-items: center; justify-content: space-between;
   }
-  header.topbar .titulo {
-    display: flex;
-    flex-direction: column;
-  }
+  header.topbar .titulo { display: flex; flex-direction: column; }
   header.topbar .titulo strong { color: var(--azul); font-size: 1.05rem; }
   header.topbar .titulo span { color: var(--gris); font-size: 0.8rem; }
 
@@ -96,17 +79,8 @@
   }
   #logout-btn:hover { background: #f9fafb; }
 
-  main {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 26px 24px 60px;
-  }
-  .toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 18px;
-  }
+  main { max-width: 1100px; margin: 0 auto; padding: 26px 24px 60px; }
+  .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
   .toolbar h2 { font-size: 1.1rem; color: var(--azul); }
   .toolbar .acciones { display: flex; gap: 10px; }
   .btn {
@@ -125,28 +99,15 @@
   .tab.active { background: #fff; color: var(--azul); box-shadow: 0 -2px 6px rgba(0,0,0,0.03); }
 
   table.actividades {
-    width: 100%;
-    border-collapse: collapse;
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px;
+    overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05);
   }
   table.actividades th {
-    text-align: left;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    color: var(--gris);
-    background: #f4f6f9;
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--borde);
+    text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.03em;
+    color: var(--gris); background: #f4f6f9; padding: 10px 14px; border-bottom: 1px solid var(--borde);
   }
   table.actividades td {
-    padding: 12px 14px;
-    font-size: 0.88rem;
-    border-bottom: 1px solid var(--borde);
-    vertical-align: top;
+    padding: 12px 14px; font-size: 0.88rem; border-bottom: 1px solid var(--borde); vertical-align: top;
   }
   table.actividades tbody tr.fila-actividad { cursor: pointer; }
   table.actividades tbody tr.fila-actividad:hover { background: #fafbfc; }
@@ -161,63 +122,84 @@
   .estado-pill.naranja { background: #fdf1e0; color: var(--naranja); }
   .estado-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
 
-  .fila-detalle td {
-    background: #fafbfc;
-    padding: 16px 22px;
-    font-size: 0.85rem;
-    color: #374151;
-  }
+  .fila-detalle td { background: #fafbfc; padding: 16px 22px; font-size: 0.85rem; color: #374151; }
   .fila-detalle.oculta { display: none; }
-  .detalle-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px 24px;
-  }
+  .detalle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px 24px; }
   .detalle-grid .campo span.label {
-    display: block;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    color: var(--gris);
-    margin-bottom: 2px;
+    display: block; font-size: 0.72rem; text-transform: uppercase; color: var(--gris); margin-bottom: 2px;
   }
   .acciones-fila { display: flex; gap: 8px; }
   .icon-btn {
-    border: 1px solid var(--borde);
-    background: #fff;
-    border-radius: 6px;
-    padding: 5px 9px;
-    cursor: pointer;
-    font-size: 0.8rem;
+    border: 1px solid var(--borde); background: #fff; border-radius: 6px;
+    padding: 5px 9px; cursor: pointer; font-size: 0.8rem;
   }
   .icon-btn.peligro { color: var(--error); border-color: #f3c9c5; }
   .icon-btn.peligro:hover { background: #fdecea; }
   .icon-btn:hover { background: #f4f6f9; }
 
   .vacio {
-    background: #fff;
-    border-radius: 10px;
-    padding: 50px 20px;
-    text-align: center;
-    color: var(--gris);
-    font-size: 0.9rem;
+    background: #fff; border-radius: 10px; padding: 50px 20px; text-align: center;
+    color: var(--gris); font-size: 0.9rem;
   }
   .vacio strong { display: block; color: #1f2933; font-size: 1rem; margin-bottom: 6px; }
 
   .toast {
-    position: fixed;
-    bottom: 22px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #1f2933;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+    background: #1f2933; color: #fff; padding: 10px 20px; border-radius: 8px;
+    font-size: 0.85rem; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 50;
   }
   .toast.visible { opacity: 1; }
+
+  /* ---------- MODAL FORMULARIO ---------- */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.45);
+    align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto; z-index: 40;
+  }
+  .modal-overlay.visible { display: flex; }
+  .modal {
+    background: #fff; border-radius: 14px; width: 100%; max-width: 720px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  }
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 24px; border-bottom: 1px solid var(--borde);
+  }
+  .modal-header h3 { color: var(--azul); font-size: 1.05rem; }
+  .modal-close { border: none; background: none; font-size: 1.2rem; cursor: pointer; color: var(--gris); }
+  .modal-body { padding: 22px 24px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; }
+  .form-grid .full { grid-column: 1 / -1; }
+  .campo-form label {
+    display: block; font-size: 0.78rem; font-weight: 600; color: #374151; margin-bottom: 4px;
+  }
+  .campo-form input[type="text"],
+  .campo-form input[type="number"],
+  .campo-form input[type="date"],
+  .campo-form select {
+    width: 100%; padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 7px; font-size: 0.85rem;
+  }
+  .campo-form input:focus, .campo-form select:focus { outline: 2px solid var(--azul-claro); outline-offset: 1px; }
+  .check-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .check-row label { font-size: 0.82rem; color: #374151; }
+
+  .lista-dinamica { display: flex; flex-direction: column; gap: 8px; }
+  .lista-dinamica .item-row { display: flex; gap: 8px; }
+  .lista-dinamica .item-row input { flex: 1; }
+  .btn-mini {
+    border: 1px solid var(--borde); background: #fff; border-radius: 6px;
+    padding: 6px 10px; font-size: 0.8rem; cursor: pointer; color: var(--azul);
+  }
+  .btn-mini:hover { background: #f4f6f9; }
+  .btn-mini.quitar { color: var(--error); border-color: #f3c9c5; }
+
+  .modal-footer {
+    display: flex; justify-content: flex-end; gap: 10px;
+    padding: 16px 24px; border-top: 1px solid var(--borde);
+  }
+  .seccion-titulo {
+    font-size: 0.8rem; font-weight: 700; color: var(--azul); margin: 6px 0 2px;
+    text-transform: uppercase; letter-spacing: 0.03em;
+  }
 </style>
 </head>
 <body>
@@ -228,9 +210,7 @@
     <div class="badge">CPR Cáceres</div>
     <h1>Plan de Formación 26-27</h1>
     <p class="subtitle">Accede con tu correo institucional de la asesoría</p>
-
     <div class="spinner" id="login-spinner"></div>
-
     <button id="login-btn">
       <svg viewBox="0 0 48 48">
         <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6.1 29.6 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.2-.1-2.4-.4-3.5z"/>
@@ -240,14 +220,12 @@
       </svg>
       Iniciar sesión con Google
     </button>
-
     <div class="error-box" id="error-box"></div>
   </div>
 </div>
 
 <!-- PANTALLA DE LA APP -->
 <div id="app-screen">
-
   <header class="topbar">
     <div class="titulo">
       <strong>Plan de Formación 26-27</strong>
@@ -272,7 +250,6 @@
     <div class="toolbar">
       <h2>Tus actividades</h2>
       <div class="acciones">
-        <button class="btn btn-secondary" id="btn-prueba">+ Crear actividad de prueba</button>
         <button class="btn btn-primary" id="btn-nueva">+ Nueva actividad</button>
       </div>
     </div>
@@ -299,7 +276,123 @@
       </table>
     </div>
   </main>
+</div>
 
+<!-- MODAL FORMULARIO -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-titulo">Nueva actividad</h3>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="form-actividad">
+
+        <div class="seccion-titulo">Datos generales</div>
+        <div class="form-grid">
+          <div class="campo-form">
+            <label>Trimestre</label>
+            <select name="trimestre">
+              <option value="1º Trimestre">1º Trimestre</option>
+              <option value="2º Trimestre">2º Trimestre</option>
+              <option value="3º Trimestre">3º Trimestre</option>
+            </select>
+          </div>
+          <div class="campo-form">
+            <label>Nº actividad</label>
+            <input type="text" name="numActividad" placeholder="Ej. TE-01">
+          </div>
+          <div class="campo-form full">
+            <label>Nombre de la actividad *</label>
+            <input type="text" name="nombre" required placeholder="Ej. Curso de IA aplicada al aula">
+          </div>
+          <div class="campo-form full">
+            <label>Destinatarios</label>
+            <input type="text" name="destinatarios" placeholder="Ej. Profesorado de Primaria">
+          </div>
+          <div class="campo-form">
+            <label>Financiación</label>
+            <input type="text" name="financiacion" placeholder="Ej. Plan Regional">
+          </div>
+          <div class="campo-form">
+            <label>Aula</label>
+            <input type="text" name="aula" placeholder="Ej. Aula 2">
+          </div>
+          <div class="campo-form">
+            <label>Horas</label>
+            <input type="number" name="horas" min="0">
+          </div>
+          <div class="campo-form">
+            <div class="check-row">
+              <input type="checkbox" id="check-publicadaWeb" name="publicadaWeb">
+              <label for="check-publicadaWeb">Publicada en la web</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="seccion-titulo" style="margin-top:18px;">Fechas clave</div>
+        <div class="form-grid">
+          <div class="campo-form">
+            <label>Inicio inscripción</label>
+            <input type="date" name="inscripcionInicio">
+          </div>
+          <div class="campo-form">
+            <label>Fin inscripción</label>
+            <input type="date" name="inscripcionFin">
+          </div>
+          <div class="campo-form">
+            <label>Publicación admitidos</label>
+            <input type="date" name="publicacionAdmitidos">
+          </div>
+          <div class="campo-form">
+            <label>Inicio de actividad (si no hay sesiones)</label>
+            <input type="date" name="inicioActividad">
+          </div>
+        </div>
+
+        <div class="seccion-titulo" style="margin-top:18px;">Sesiones</div>
+        <div class="lista-dinamica" id="lista-sesiones"></div>
+        <button type="button" class="btn-mini" id="add-sesion" style="margin-top:8px;">+ Añadir sesión</button>
+
+        <div class="seccion-titulo" style="margin-top:18px;">Contactos</div>
+        <div class="lista-dinamica" id="lista-contactos"></div>
+        <button type="button" class="btn-mini" id="add-contacto" style="margin-top:8px;">+ Añadir contacto</button>
+
+        <div class="seccion-titulo" style="margin-top:18px;">Estado y seguimiento</div>
+        <div class="form-grid">
+          <div class="campo-form">
+            <div class="check-row">
+              <input type="checkbox" id="check-addToCal" name="addToCal">
+              <label for="check-addToCal">Sincronizar con mi calendario</label>
+            </div>
+          </div>
+          <div class="campo-form">
+            <div class="check-row">
+              <input type="checkbox" id="check-finalizado" name="finalizado">
+              <label for="check-finalizado">Actividad finalizada</label>
+            </div>
+          </div>
+          <div class="campo-form">
+            <div class="check-row">
+              <input type="checkbox" id="check-docEntregada" name="docEntregada">
+              <label for="check-docEntregada">Díptico entregado</label>
+            </div>
+          </div>
+          <div class="campo-form">
+            <div class="check-row">
+              <input type="checkbox" id="check-pegatinaImpresa" name="pegatinaImpresa">
+              <label for="check-pegatinaImpresa">Pegatina impresa</label>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" id="modal-cancelar">Cancelar</button>
+      <button type="submit" form="form-actividad" class="btn btn-primary" id="modal-guardar">Guardar actividad</button>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -311,7 +404,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import {
   getFirestore, collection, query, where, onSnapshot,
-  addDoc, deleteDoc, doc, serverTimestamp
+  addDoc, updateDoc, deleteDoc, doc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 // === Configuración del proyecto Firebase ===
@@ -340,7 +433,7 @@ const ASESORIAS_AUTORIZADAS = {
   "asesoriate.cprcaceres@educarex.es": "Tecnologías Educativas"
 };
 
-// === DOM ===
+// === DOM general ===
 const loginScreen = document.getElementById('login-screen');
 const appScreen = document.getElementById('app-screen');
 const loginBtn = document.getElementById('login-btn');
@@ -356,17 +449,24 @@ const asesoriaLabel = document.getElementById('asesoria-label');
 const tablaBody = document.getElementById('tabla-body');
 const tabla = document.getElementById('tabla-actividades');
 const vacioMsg = document.getElementById('vacio-msg');
-const btnPrueba = document.getElementById('btn-prueba');
 const btnNueva = document.getElementById('btn-nueva');
 const toast = document.getElementById('toast');
 
-function mostrarError(msg) {
-  errorBox.textContent = msg;
-  errorBox.classList.add('visible');
-}
-function ocultarError() {
-  errorBox.classList.remove('visible');
-}
+// === DOM modal ===
+const modalOverlay = document.getElementById('modal-overlay');
+const modalTitulo = document.getElementById('modal-titulo');
+const modalClose = document.getElementById('modal-close');
+const modalCancelar = document.getElementById('modal-cancelar');
+const formActividad = document.getElementById('form-actividad');
+const listaSesiones = document.getElementById('lista-sesiones');
+const listaContactos = document.getElementById('lista-contactos');
+const addSesionBtn = document.getElementById('add-sesion');
+const addContactoBtn = document.getElementById('add-contacto');
+
+let actividadEditandoId = null; // null = creando nueva
+
+function mostrarError(msg) { errorBox.textContent = msg; errorBox.classList.add('visible'); }
+function ocultarError() { errorBox.classList.remove('visible'); }
 function mostrarToast(msg) {
   toast.textContent = msg;
   toast.classList.add('visible');
@@ -378,10 +478,8 @@ loginBtn.addEventListener('click', async () => {
   ocultarError();
   spinner.classList.add('visible');
   loginBtn.disabled = true;
-
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ hd: 'educarex.es' });
-
   try {
     await signInWithPopup(auth, provider);
   } catch (err) {
@@ -434,7 +532,9 @@ onAuthStateChanged(auth, (user) => {
   cargarActividades(user.email);
 });
 
-// === Carga en tiempo real de actividades de la asesoría logueada ===
+// === Carga en tiempo real de actividades ===
+const actividadesCache = {}; // id -> datos, para poder editar sin volver a leer
+
 function cargarActividades(email) {
   const q = query(collection(db, 'actividades_plan'), where('asesoria', '==', email));
 
@@ -452,6 +552,7 @@ function cargarActividades(email) {
     snapshot.forEach((docSnap) => {
       const a = docSnap.data();
       const id = docSnap.id;
+      actividadesCache[id] = a;
       tablaBody.appendChild(filaActividad(id, a));
       tablaBody.appendChild(filaDetalle(id, a));
     });
@@ -482,12 +583,13 @@ function filaActividad(id, a) {
     <td>${estadoPill(a)}</td>
     <td>
       <div class="acciones-fila">
+        <button class="icon-btn" data-editar="${id}" title="Editar actividad">✏️</button>
         <button class="icon-btn peligro" data-borrar="${id}" title="Eliminar actividad">🗑</button>
       </div>
     </td>
   `;
   tr.addEventListener('click', (e) => {
-    if (e.target.closest('[data-borrar]')) return;
+    if (e.target.closest('[data-borrar]') || e.target.closest('[data-editar]')) return;
     const detalle = document.querySelector(`.fila-detalle[data-id="${id}"]`);
     if (detalle) detalle.classList.toggle('oculta');
   });
@@ -523,62 +625,146 @@ function filaDetalle(id, a) {
   return tr;
 }
 
-// === Borrar actividad (delegación de eventos) ===
+// === Borrar actividad ===
 tablaBody.addEventListener('click', async (e) => {
-  const btn = e.target.closest('[data-borrar]');
-  if (!btn) return;
-  const id = btn.dataset.borrar;
-  const ok = confirm('¿Seguro que quieres eliminar esta actividad? Esta acción no se puede deshacer.');
-  if (!ok) return;
-  try {
-    await deleteDoc(doc(db, 'actividades_plan', id));
-    mostrarToast('Actividad eliminada.');
-  } catch (err) {
-    console.error(err);
-    mostrarToast('No se pudo eliminar la actividad.');
+  const btnBorrar = e.target.closest('[data-borrar]');
+  if (btnBorrar) {
+    const id = btnBorrar.dataset.borrar;
+    const ok = confirm('¿Seguro que quieres eliminar esta actividad? Esta acción no se puede deshacer.');
+    if (!ok) return;
+    try {
+      await deleteDoc(doc(db, 'actividades_plan', id));
+      mostrarToast('Actividad eliminada.');
+    } catch (err) {
+      console.error(err);
+      mostrarToast('No se pudo eliminar la actividad.');
+    }
+    return;
+  }
+
+  const btnEditar = e.target.closest('[data-editar]');
+  if (btnEditar) {
+    const id = btnEditar.dataset.editar;
+    abrirModal(id, actividadesCache[id]);
   }
 });
 
-// === Nueva actividad (formulario real: próxima fase) ===
-btnNueva.addEventListener('click', () => {
-  alert('El formulario de nueva actividad lo construimos en la siguiente fase. Por ahora puedes usar "Crear actividad de prueba" para ver la tabla en acción.');
+// ====================== MODAL / FORMULARIO ======================
+
+function filaItemDinamico(valor, tipo, placeholder) {
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.innerHTML = `
+    <input type="${tipo}" value="${valor || ''}" placeholder="${placeholder || ''}">
+    <button type="button" class="btn-mini quitar">Quitar</button>
+  `;
+  row.querySelector('.quitar').addEventListener('click', () => row.remove());
+  return row;
+}
+
+addSesionBtn.addEventListener('click', () => {
+  listaSesiones.appendChild(filaItemDinamico('', 'date'));
+});
+addContactoBtn.addEventListener('click', () => {
+  listaContactos.appendChild(filaItemDinamico('', 'text', 'Nombre del contacto'));
 });
 
-// === Actividad de prueba (temporal, solo para validar la tabla) ===
-btnPrueba.addEventListener('click', async () => {
+function resetForm() {
+  formActividad.reset();
+  listaSesiones.innerHTML = '';
+  listaContactos.innerHTML = '';
+}
+
+function abrirModal(id = null, datos = null) {
+  resetForm();
+  actividadEditandoId = id;
+  modalTitulo.textContent = id ? 'Editar actividad' : 'Nueva actividad';
+
+  if (datos) {
+    formActividad.trimestre.value = datos.trimestre || '1º Trimestre';
+    formActividad.numActividad.value = datos.numActividad || '';
+    formActividad.nombre.value = datos.nombre || '';
+    formActividad.destinatarios.value = datos.destinatarios || '';
+    formActividad.financiacion.value = datos.financiacion || '';
+    formActividad.aula.value = datos.aula || '';
+    formActividad.horas.value = datos.horas || '';
+    formActividad.publicadaWeb.checked = !!datos.publicadaWeb;
+    formActividad.inscripcionInicio.value = datos.inscripcionInicio || '';
+    formActividad.inscripcionFin.value = datos.inscripcionFin || '';
+    formActividad.publicacionAdmitidos.value = datos.publicacionAdmitidos || '';
+    formActividad.inicioActividad.value = datos.inicioActividad || '';
+    formActividad.addToCal.checked = !!datos.addToCal;
+    formActividad.finalizado.checked = !!datos.finalizado;
+    formActividad.docEntregada.checked = !!datos.docEntregada;
+    formActividad.pegatinaImpresa.checked = !!datos.pegatinaImpresa;
+
+    (datos.sesiones || []).forEach(s => listaSesiones.appendChild(filaItemDinamico(s, 'date')));
+    (datos.contactos || []).forEach(c => listaContactos.appendChild(filaItemDinamico(c, 'text', 'Nombre del contacto')));
+  }
+
+  modalOverlay.classList.add('visible');
+}
+
+function cerrarModal() {
+  modalOverlay.classList.remove('visible');
+  actividadEditandoId = null;
+}
+
+btnNueva.addEventListener('click', () => abrirModal());
+modalClose.addEventListener('click', cerrarModal);
+modalCancelar.addEventListener('click', cerrarModal);
+modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) cerrarModal(); });
+
+formActividad.addEventListener('submit', async (e) => {
+  e.preventDefault();
   if (!window.usuarioActual) return;
+
+  const fd = new FormData(formActividad);
+  const sesiones = Array.from(listaSesiones.querySelectorAll('input')).map(i => i.value).filter(Boolean);
+  const contactos = Array.from(listaContactos.querySelectorAll('input')).map(i => i.value.trim()).filter(Boolean);
+
+  const datos = {
+    asesoria: window.usuarioActual.email,
+    asesoriaNombre: window.usuarioActual.asesoria,
+    trimestre: fd.get('trimestre') || '',
+    numActividad: fd.get('numActividad') || '',
+    nombre: (fd.get('nombre') || '').trim(),
+    destinatarios: fd.get('destinatarios') || '',
+    financiacion: fd.get('financiacion') || '',
+    aula: fd.get('aula') || '',
+    horas: fd.get('horas') ? Number(fd.get('horas')) : null,
+    publicadaWeb: formActividad.publicadaWeb.checked,
+    inscripcionInicio: fd.get('inscripcionInicio') || '',
+    inscripcionFin: fd.get('inscripcionFin') || '',
+    publicacionAdmitidos: fd.get('publicacionAdmitidos') || '',
+    inicioActividad: fd.get('inicioActividad') || '',
+    sesiones,
+    contactos,
+    addToCal: formActividad.addToCal.checked,
+    finalizado: formActividad.finalizado.checked,
+    docEntregada: formActividad.docEntregada.checked,
+    pegatinaImpresa: formActividad.pegatinaImpresa.checked,
+    status: formActividad.addToCal.checked ? 'Agendado' : '',
+    actualizadoEn: serverTimestamp()
+  };
+
+  if (!datos.nombre) { mostrarToast('El nombre de la actividad es obligatorio.'); return; }
+
   try {
-    await addDoc(collection(db, 'actividades_plan'), {
-      asesoria: window.usuarioActual.email,
-      asesoriaNombre: window.usuarioActual.asesoria,
-      trimestre: '1º Trimestre',
-      numActividad: 'PRUEBA-01',
-      nombre: 'Actividad de prueba',
-      destinatarios: 'Profesorado de Primaria',
-      financiacion: 'Plan Regional',
-      publicadaWeb: false,
-      inscripcionInicio: '2026-09-15',
-      inscripcionFin: '2026-09-30',
-      publicacionAdmitidos: '2026-10-02',
-      inicioActividad: '2026-10-10',
-      addToCal: false,
-      status: '',
-      finalizado: false,
-      horas: 20,
-      sesiones: ['2026-10-10', '2026-10-17'],
-      docEntregada: false,
-      pegatinaImpresa: false,
-      aula: 'Aula 2',
-      contactos: [window.usuarioActual.asesoria],
-      eventIds: {},
-      lastSync: null,
-      creadoEn: serverTimestamp(),
-      actualizadoEn: serverTimestamp()
-    });
-    mostrarToast('Actividad de prueba creada.');
+    if (actividadEditandoId) {
+      await updateDoc(doc(db, 'actividades_plan', actividadEditandoId), datos);
+      mostrarToast('Actividad actualizada.');
+    } else {
+      datos.eventIds = {};
+      datos.lastSync = null;
+      datos.creadoEn = serverTimestamp();
+      await addDoc(collection(db, 'actividades_plan'), datos);
+      mostrarToast('Actividad creada.');
+    }
+    cerrarModal();
   } catch (err) {
     console.error(err);
-    mostrarToast('No se pudo crear. Revisa las reglas de Firestore.');
+    mostrarToast('No se pudo guardar. Revisa las reglas de Firestore.');
   }
 });
 </script>
