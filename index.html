@@ -184,7 +184,8 @@
 
   .lista-dinamica { display: flex; flex-direction: column; gap: 8px; }
   .lista-dinamica .item-row { display: flex; gap: 8px; }
-  .lista-dinamica .item-row input { flex: 1; }
+  .lista-dinamica .item-row input { flex: 1; min-width: 0; }
+  .lista-dinamica .contacto-row input { min-width: 110px; }
   .btn-mini {
     border: 1px solid var(--borde); background: #fff; border-radius: 6px;
     padding: 6px 10px; font-size: 0.8rem; cursor: pointer; color: var(--azul);
@@ -308,15 +309,60 @@
           </div>
           <div class="campo-form full">
             <label>Destinatarios</label>
-            <input type="text" name="destinatarios" placeholder="Ej. Profesorado de Primaria">
+            <select name="destinatarios">
+              <option value="">— Selecciona —</option>
+              <option>TODOS NIVELES</option>
+              <option>INF/PRIM</option>
+              <option>INF.</option>
+              <option>PRIM.</option>
+              <option>SECUNDARIA</option>
+              <option>FORM. PROF</option>
+              <option>FP GRADO MED</option>
+              <option>FP GRADO SUP</option>
+              <option>ART.</option>
+              <option>EOI</option>
+              <option>EPA</option>
+              <option>COMPENSATORIA</option>
+              <option>EQ. DIRECTIVOS</option>
+              <option>EQ. ORIENTACIÓN</option>
+              <option>EQ. RED FORM.</option>
+              <option>EQ. INTERDIS.</option>
+              <option>INSPECCIÓN</option>
+              <option>INCLUSIÓN</option>
+            </select>
           </div>
           <div class="campo-form">
             <label>Financiación</label>
-            <input type="text" name="financiacion" placeholder="Ej. Plan Regional">
+            <select name="financiacion">
+              <option value="">— Selecciona —</option>
+              <option>FONDOS PROPIOS</option>
+              <option>FSE</option>
+              <option>AFEDAP</option>
+              <option>BIENESTAR EMOCIONAL</option>
+              <option>MRR CAPACITACION</option>
+              <option>PROF 23</option>
+              <option>ESCUELA 4.0</option>
+              <option>RAYUELA FORM</option>
+            </select>
           </div>
           <div class="campo-form">
             <label>Aula</label>
-            <input type="text" name="aula" placeholder="Ej. Aula 2">
+            <select name="aula">
+              <option value="">— Selecciona —</option>
+              <option>ASIGNAR</option>
+              <option>Aula 1 (19 plazas)</option>
+              <option>Aula 2 (30 plazas)</option>
+              <option>Salón de Actos (21 plazas)</option>
+              <option>Aula TIC 3 (20/30 plazas)</option>
+              <option>Biblioteca</option>
+              <option>Aula TIC 1 (42 plazas)</option>
+              <option>Aula TIC 2 (15 plazas)</option>
+              <option>Aula del Futuro (30 plazas)</option>
+              <option>Aula 3 (30 plazas)</option>
+              <option>Aula 4 (30 plazas)</option>
+              <option>Aula 5 (30 plazas)</option>
+              <option>Otros espacios</option>
+            </select>
           </div>
           <div class="campo-form">
             <label>Horas</label>
@@ -380,8 +426,26 @@
           </div>
           <div class="campo-form">
             <div class="check-row">
-              <input type="checkbox" id="check-pegatinaImpresa" name="pegatinaImpresa">
-              <label for="check-pegatinaImpresa">Pegatina impresa</label>
+              <input type="checkbox" id="check-evaluacionAsesor" name="evaluacionAsesor">
+              <label for="check-evaluacionAsesor">Evaluación de asesor</label>
+            </div>
+          </div>
+          <div class="campo-form">
+            <div class="check-row">
+              <input type="checkbox" id="check-evaluacionPonentes" name="evaluacionPonentes">
+              <label for="check-evaluacionPonentes">Evaluación de ponentes</label>
+            </div>
+          </div>
+          <div class="campo-form">
+            <div class="check-row">
+              <input type="checkbox" id="check-actaFinal" name="actaFinal">
+              <label for="check-actaFinal">Acta final</label>
+            </div>
+          </div>
+          <div class="campo-form">
+            <div class="check-row">
+              <input type="checkbox" id="check-firmasPonente" name="firmasPonente">
+              <label for="check-firmasPonente">Firmas de ponente</label>
             </div>
           </div>
         </div>
@@ -601,7 +665,13 @@ function filaDetalle(id, a) {
   tr.className = 'fila-detalle oculta';
   tr.dataset.id = id;
   const sesionesTxt = Array.isArray(a.sesiones) && a.sesiones.length ? a.sesiones.join(', ') : '—';
-  const contactosTxt = Array.isArray(a.contactos) && a.contactos.length ? a.contactos.join(', ') : '—';
+  const contactosTxt = Array.isArray(a.contactos) && a.contactos.length
+    ? a.contactos.map(c => {
+        if (typeof c === 'string') return c; // compatibilidad con datos antiguos
+        const partes = [c.nombre, c.telefono, c.dni, c.email].filter(Boolean);
+        return partes.join(' · ');
+      }).join('<br>')
+    : '—';
   tr.innerHTML = `
     <td colspan="7">
       <div class="detalle-grid">
@@ -617,8 +687,11 @@ function filaDetalle(id, a) {
         <div class="campo"><span class="label">Añadida al calendario</span>${a.addToCal ? 'Sí' : 'No'}</div>
         <div class="campo"><span class="label">Estado (texto)</span>${a.status || '—'}</div>
         <div class="campo"><span class="label">Díptico entregado</span>${a.docEntregada ? 'Sí' : 'No'}</div>
-        <div class="campo"><span class="label">Pegatina impresa</span>${a.pegatinaImpresa ? 'Sí' : 'No'}</div>
-        <div class="campo"><span class="label">Contactos</span>${contactosTxt}</div>
+        <div class="campo"><span class="label">Evaluación de asesor</span>${a.evaluacionAsesor ? 'Sí' : 'No'}</div>
+        <div class="campo"><span class="label">Evaluación de ponentes</span>${a.evaluacionPonentes ? 'Sí' : 'No'}</div>
+        <div class="campo"><span class="label">Acta final</span>${a.actaFinal ? 'Sí' : 'No'}</div>
+        <div class="campo"><span class="label">Firmas de ponente</span>${a.firmasPonente ? 'Sí' : 'No'}</div>
+        <div class="campo full" style="grid-column:1/-1;"><span class="label">Contactos</span>${contactosTxt}</div>
       </div>
     </td>
   `;
@@ -662,11 +735,26 @@ function filaItemDinamico(valor, tipo, placeholder) {
   return row;
 }
 
+function filaContacto(contacto = {}) {
+  const row = document.createElement('div');
+  row.className = 'item-row contacto-row';
+  row.style.flexWrap = 'wrap';
+  row.innerHTML = `
+    <input type="text" class="c-nombre" value="${contacto.nombre || ''}" placeholder="Nombre" style="flex:1.3;">
+    <input type="text" class="c-telefono" value="${contacto.telefono || ''}" placeholder="Teléfono" style="flex:1;">
+    <input type="text" class="c-dni" value="${contacto.dni || ''}" placeholder="DNI" style="flex:1;">
+    <input type="text" class="c-email" value="${contacto.email || ''}" placeholder="Correo electrónico" style="flex:1.4;">
+    <button type="button" class="btn-mini quitar">Quitar</button>
+  `;
+  row.querySelector('.quitar').addEventListener('click', () => row.remove());
+  return row;
+}
+
 addSesionBtn.addEventListener('click', () => {
   listaSesiones.appendChild(filaItemDinamico('', 'date'));
 });
 addContactoBtn.addEventListener('click', () => {
-  listaContactos.appendChild(filaItemDinamico('', 'text', 'Nombre del contacto'));
+  listaContactos.appendChild(filaContacto());
 });
 
 function resetForm() {
@@ -696,10 +784,13 @@ function abrirModal(id = null, datos = null) {
     formActividad.addToCal.checked = !!datos.addToCal;
     formActividad.finalizado.checked = !!datos.finalizado;
     formActividad.docEntregada.checked = !!datos.docEntregada;
-    formActividad.pegatinaImpresa.checked = !!datos.pegatinaImpresa;
+    formActividad.evaluacionAsesor.checked = !!datos.evaluacionAsesor;
+    formActividad.evaluacionPonentes.checked = !!datos.evaluacionPonentes;
+    formActividad.actaFinal.checked = !!datos.actaFinal;
+    formActividad.firmasPonente.checked = !!datos.firmasPonente;
 
     (datos.sesiones || []).forEach(s => listaSesiones.appendChild(filaItemDinamico(s, 'date')));
-    (datos.contactos || []).forEach(c => listaContactos.appendChild(filaItemDinamico(c, 'text', 'Nombre del contacto')));
+    (datos.contactos || []).forEach(c => listaContactos.appendChild(filaContacto(c)));
   }
 
   modalOverlay.classList.add('visible');
@@ -721,7 +812,12 @@ formActividad.addEventListener('submit', async (e) => {
 
   const fd = new FormData(formActividad);
   const sesiones = Array.from(listaSesiones.querySelectorAll('input')).map(i => i.value).filter(Boolean);
-  const contactos = Array.from(listaContactos.querySelectorAll('input')).map(i => i.value.trim()).filter(Boolean);
+  const contactos = Array.from(listaContactos.querySelectorAll('.contacto-row')).map(row => ({
+    nombre: row.querySelector('.c-nombre').value.trim(),
+    telefono: row.querySelector('.c-telefono').value.trim(),
+    dni: row.querySelector('.c-dni').value.trim(),
+    email: row.querySelector('.c-email').value.trim()
+  })).filter(c => c.nombre || c.telefono || c.dni || c.email);
 
   const datos = {
     asesoria: window.usuarioActual.email,
@@ -743,7 +839,10 @@ formActividad.addEventListener('submit', async (e) => {
     addToCal: formActividad.addToCal.checked,
     finalizado: formActividad.finalizado.checked,
     docEntregada: formActividad.docEntregada.checked,
-    pegatinaImpresa: formActividad.pegatinaImpresa.checked,
+    evaluacionAsesor: formActividad.evaluacionAsesor.checked,
+    evaluacionPonentes: formActividad.evaluacionPonentes.checked,
+    actaFinal: formActividad.actaFinal.checked,
+    firmasPonente: formActividad.firmasPonente.checked,
     status: formActividad.addToCal.checked ? 'Agendado' : '',
     actualizadoEn: serverTimestamp()
   };
