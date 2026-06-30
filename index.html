@@ -11,17 +11,26 @@
     --gris: #6b7280;
     --fondo: #f4f6f9;
     --error: #c0392b;
+    --verde: #1d8a4a;
+    --naranja: #c9821a;
+    --borde: #e2e5ea;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
     background: var(--fondo);
     min-height: 100vh;
+    color: #1f2933;
+  }
+
+  /* ---------- LOGIN ---------- */
+  #login-screen {
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #1f2933;
   }
+  #login-screen.hidden { display: none; }
   .card {
     background: #fff;
     border-radius: 14px;
@@ -31,104 +40,191 @@
     max-width: 380px;
     text-align: center;
   }
-  .card h1 {
-    font-size: 1.3rem;
-    color: var(--azul);
-    margin-bottom: 4px;
-  }
-  .card p.subtitle {
-    color: var(--gris);
-    font-size: 0.9rem;
-    margin-bottom: 28px;
-  }
+  .card h1 { font-size: 1.3rem; color: var(--azul); margin-bottom: 4px; }
+  .card p.subtitle { color: var(--gris); font-size: 0.9rem; margin-bottom: 28px; }
   #login-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: #fff;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    padding: 11px 22px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #1f2933;
-    cursor: pointer;
-    transition: background 0.15s, box-shadow 0.15s;
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #fff; border: 1px solid #d1d5db; border-radius: 8px;
+    padding: 11px 22px; font-size: 0.95rem; font-weight: 600;
+    color: #1f2933; cursor: pointer; transition: background 0.15s, box-shadow 0.15s;
   }
   #login-btn:hover { background: #f9fafb; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
   #login-btn svg { width: 20px; height: 20px; }
-
-  #app-screen { display: none; }
-  #app-screen.visible { display: block; }
-  #login-screen.hidden { display: none; }
-
   .badge {
-    display: inline-block;
-    background: #e8f0fe;
-    color: var(--azul);
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 4px 12px;
-    border-radius: 20px;
-    margin-bottom: 14px;
+    display: inline-block; background: #e8f0fe; color: var(--azul);
+    font-size: 0.8rem; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px;
   }
-  .user-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    justify-content: center;
-    margin-bottom: 18px;
-  }
-  .user-row img { width: 44px; height: 44px; border-radius: 50%; }
-  .user-row .name { font-weight: 600; font-size: 0.95rem; }
-  .user-row .email { color: var(--gris); font-size: 0.8rem; }
-
-  #logout-btn {
-    margin-top: 18px;
-    background: none;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    padding: 8px 18px;
-    font-size: 0.85rem;
-    color: var(--gris);
-    cursor: pointer;
-  }
-  #logout-btn:hover { background: #f9fafb; }
-
   .error-box {
-    display: none;
-    background: #fdecea;
-    border: 1px solid #f5c6c2;
-    color: var(--error);
-    border-radius: 8px;
-    padding: 14px 16px;
-    font-size: 0.85rem;
-    margin-top: 18px;
-    text-align: left;
-    line-height: 1.4;
+    display: none; background: #fdecea; border: 1px solid #f5c6c2; color: var(--error);
+    border-radius: 8px; padding: 14px 16px; font-size: 0.85rem; margin-top: 18px; text-align: left; line-height: 1.4;
   }
   .error-box.visible { display: block; }
-
   .spinner {
-    display: none;
-    margin: 0 auto;
-    width: 26px;
-    height: 26px;
-    border: 3px solid #e5e7eb;
-    border-top-color: var(--azul-claro);
-    border-radius: 50%;
+    display: none; margin: 0 auto; width: 26px; height: 26px;
+    border: 3px solid #e5e7eb; border-top-color: var(--azul-claro); border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
   .spinner.visible { display: block; }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---------- APP ---------- */
+  #app-screen { display: none; }
+  #app-screen.visible { display: block; }
+
+  header.topbar {
+    background: #fff;
+    border-bottom: 1px solid var(--borde);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  header.topbar .titulo {
+    display: flex;
+    flex-direction: column;
+  }
+  header.topbar .titulo strong { color: var(--azul); font-size: 1.05rem; }
+  header.topbar .titulo span { color: var(--gris); font-size: 0.8rem; }
+
+  .user-row { display: flex; align-items: center; gap: 10px; }
+  .user-row img { width: 34px; height: 34px; border-radius: 50%; }
+  .user-row .name { font-weight: 600; font-size: 0.85rem; }
+  .user-row .email { color: var(--gris); font-size: 0.75rem; }
+  #logout-btn {
+    margin-left: 14px; background: none; border: 1px solid #d1d5db; border-radius: 8px;
+    padding: 6px 14px; font-size: 0.8rem; color: var(--gris); cursor: pointer;
+  }
+  #logout-btn:hover { background: #f9fafb; }
+
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 26px 24px 60px;
+  }
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .toolbar h2 { font-size: 1.1rem; color: var(--azul); }
+  .toolbar .acciones { display: flex; gap: 10px; }
+  .btn {
+    border: none; border-radius: 8px; padding: 9px 16px; font-size: 0.85rem;
+    font-weight: 600; cursor: pointer; transition: opacity 0.15s;
+  }
+  .btn:hover { opacity: 0.9; }
+  .btn-primary { background: var(--azul); color: #fff; }
+  .btn-secondary { background: #fff; color: var(--azul); border: 1px solid var(--azul); }
+
+  .tabs { display: flex; gap: 6px; margin-bottom: 18px; }
+  .tab {
+    padding: 8px 16px; border-radius: 8px 8px 0 0; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; color: var(--gris); background: #e9edf2;
+  }
+  .tab.active { background: #fff; color: var(--azul); box-shadow: 0 -2px 6px rgba(0,0,0,0.03); }
+
+  table.actividades {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  table.actividades th {
+    text-align: left;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--gris);
+    background: #f4f6f9;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--borde);
+  }
+  table.actividades td {
+    padding: 12px 14px;
+    font-size: 0.88rem;
+    border-bottom: 1px solid var(--borde);
+    vertical-align: top;
+  }
+  table.actividades tbody tr.fila-actividad { cursor: pointer; }
+  table.actividades tbody tr.fila-actividad:hover { background: #fafbfc; }
+
+  .estado-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+  }
+  .estado-pill.gris { background: #eef0f3; color: var(--gris); }
+  .estado-pill.azul { background: #e8f0fe; color: var(--azul-claro); }
+  .estado-pill.verde { background: #e5f6ec; color: var(--verde); }
+  .estado-pill.naranja { background: #fdf1e0; color: var(--naranja); }
+  .estado-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+  .fila-detalle td {
+    background: #fafbfc;
+    padding: 16px 22px;
+    font-size: 0.85rem;
+    color: #374151;
+  }
+  .fila-detalle.oculta { display: none; }
+  .detalle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px 24px;
+  }
+  .detalle-grid .campo span.label {
+    display: block;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    color: var(--gris);
+    margin-bottom: 2px;
+  }
+  .acciones-fila { display: flex; gap: 8px; }
+  .icon-btn {
+    border: 1px solid var(--borde);
+    background: #fff;
+    border-radius: 6px;
+    padding: 5px 9px;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+  .icon-btn.peligro { color: var(--error); border-color: #f3c9c5; }
+  .icon-btn.peligro:hover { background: #fdecea; }
+  .icon-btn:hover { background: #f4f6f9; }
+
+  .vacio {
+    background: #fff;
+    border-radius: 10px;
+    padding: 50px 20px;
+    text-align: center;
+    color: var(--gris);
+    font-size: 0.9rem;
+  }
+  .vacio strong { display: block; color: #1f2933; font-size: 1rem; margin-bottom: 6px; }
+
+  .toast {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2933;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .toast.visible { opacity: 1; }
 </style>
 </head>
 <body>
 
-<div class="card">
-
-  <!-- PANTALLA DE LOGIN -->
-  <div id="login-screen">
+<!-- PANTALLA DE LOGIN -->
+<div id="login-screen">
+  <div class="card">
     <div class="badge">CPR Cáceres</div>
     <h1>Plan de Formación 26-27</h1>
     <p class="subtitle">Accede con tu correo institucional de la asesoría</p>
@@ -147,33 +243,76 @@
 
     <div class="error-box" id="error-box"></div>
   </div>
+</div>
 
-  <!-- PANTALLA TRAS LOGIN -->
-  <div id="app-screen">
-    <div class="badge">Acceso correcto</div>
+<!-- PANTALLA DE LA APP -->
+<div id="app-screen">
+
+  <header class="topbar">
+    <div class="titulo">
+      <strong>Plan de Formación 26-27</strong>
+      <span id="asesoria-label">—</span>
+    </div>
     <div class="user-row">
       <img id="user-photo" src="" alt="">
       <div>
         <div class="name" id="user-name"></div>
         <div class="email" id="user-email"></div>
       </div>
+      <button id="logout-btn">Cerrar sesión</button>
     </div>
-    <p class="subtitle" id="asesoria-label" style="margin-bottom:6px;"></p>
-    <p style="font-size:0.85rem; color:#6b7280;">Aquí cargaremos tu planificación de actividades.</p>
-    <button id="logout-btn">Cerrar sesión</button>
-  </div>
+  </header>
+
+  <main>
+    <div class="tabs">
+      <div class="tab active" data-tab="plan">Plan de Formación</div>
+      <div class="tab" data-tab="gt" title="Próximamente">G.T. / Sem. P. Inov.</div>
+    </div>
+
+    <div class="toolbar">
+      <h2>Tus actividades</h2>
+      <div class="acciones">
+        <button class="btn btn-secondary" id="btn-prueba">+ Crear actividad de prueba</button>
+        <button class="btn btn-primary" id="btn-nueva">+ Nueva actividad</button>
+      </div>
+    </div>
+
+    <div id="tabla-wrap">
+      <div class="vacio" id="vacio-msg">
+        <strong>Aún no tienes actividades</strong>
+        Cuando crees tu primera actividad del curso, aparecerá aquí.
+      </div>
+
+      <table class="actividades" id="tabla-actividades" style="display:none;">
+        <thead>
+          <tr>
+            <th>Trimestre</th>
+            <th>Nombre</th>
+            <th>Destinatarios</th>
+            <th>Inicio inscripción</th>
+            <th>Sesiones</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tabla-body"></tbody>
+      </table>
+    </div>
+  </main>
 
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged
+  getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import {
+  getFirestore, collection, query, where, onSnapshot,
+  addDoc, deleteDoc, doc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 // === Configuración del proyecto Firebase ===
 const firebaseConfig = {
@@ -187,9 +326,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 // === Lista blanca de las 8 asesorías ===
-// email institucional -> nombre legible de la asesoría
 const ASESORIAS_AUTORIZADAS = {
   "innovacion.cprcaceres@educarex.es": "Innovación Educativa",
   "formacionencentro.cprcaceres@educarex.es": "Formación en Centros y Autoformación",
@@ -201,7 +340,7 @@ const ASESORIAS_AUTORIZADAS = {
   "asesoriate.cprcaceres@educarex.es": "Tecnologías Educativas"
 };
 
-// === Elementos del DOM ===
+// === DOM ===
 const loginScreen = document.getElementById('login-screen');
 const appScreen = document.getElementById('app-screen');
 const loginBtn = document.getElementById('login-btn');
@@ -214,12 +353,24 @@ const userName = document.getElementById('user-name');
 const userEmail = document.getElementById('user-email');
 const asesoriaLabel = document.getElementById('asesoria-label');
 
+const tablaBody = document.getElementById('tabla-body');
+const tabla = document.getElementById('tabla-actividades');
+const vacioMsg = document.getElementById('vacio-msg');
+const btnPrueba = document.getElementById('btn-prueba');
+const btnNueva = document.getElementById('btn-nueva');
+const toast = document.getElementById('toast');
+
 function mostrarError(msg) {
   errorBox.textContent = msg;
   errorBox.classList.add('visible');
 }
 function ocultarError() {
   errorBox.classList.remove('visible');
+}
+function mostrarToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 2600);
 }
 
 // === Login con Google ===
@@ -229,12 +380,10 @@ loginBtn.addEventListener('click', async () => {
   loginBtn.disabled = true;
 
   const provider = new GoogleAuthProvider();
-  // Sugerimos cuentas del dominio educarex.es (no bloquea otras, solo orienta el selector)
   provider.setCustomParameters({ hd: 'educarex.es' });
 
   try {
     await signInWithPopup(auth, provider);
-    // onAuthStateChanged se encarga del resto
   } catch (err) {
     spinner.classList.remove('visible');
     loginBtn.disabled = false;
@@ -243,15 +392,15 @@ loginBtn.addEventListener('click', async () => {
   }
 });
 
-// === Logout ===
-logoutBtn.addEventListener('click', () => {
-  signOut(auth);
-});
+logoutBtn.addEventListener('click', () => signOut(auth));
 
-// === Control de sesión y validación de la lista blanca ===
+let unsubscribeActividades = null;
+
 onAuthStateChanged(auth, (user) => {
   spinner.classList.remove('visible');
   loginBtn.disabled = false;
+
+  if (unsubscribeActividades) { unsubscribeActividades(); unsubscribeActividades = null; }
 
   if (!user) {
     appScreen.classList.remove('visible');
@@ -263,7 +412,6 @@ onAuthStateChanged(auth, (user) => {
   const asesoriaNombre = ASESORIAS_AUTORIZADAS[email];
 
   if (!asesoriaNombre) {
-    // Email válido en Google, pero no está en la lista de las 8 asesorías
     signOut(auth);
     mostrarError(
       `El correo ${user.email} no tiene acceso a esta aplicación. ` +
@@ -272,7 +420,6 @@ onAuthStateChanged(auth, (user) => {
     return;
   }
 
-  // Acceso correcto
   ocultarError();
   loginScreen.classList.add('hidden');
   appScreen.classList.add('visible');
@@ -280,10 +427,154 @@ onAuthStateChanged(auth, (user) => {
   userPhoto.src = user.photoURL || '';
   userName.textContent = user.displayName || '';
   userEmail.textContent = user.email;
-  asesoriaLabel.textContent = `Asesoría: ${asesoriaNombre}`;
+  asesoriaLabel.textContent = `Asesoría de ${asesoriaNombre}`;
 
-  // Guardamos en sesión el email y la asesoría para usarlos en las siguientes fases
   window.usuarioActual = { email: user.email, asesoria: asesoriaNombre };
+
+  cargarActividades(user.email);
+});
+
+// === Carga en tiempo real de actividades de la asesoría logueada ===
+function cargarActividades(email) {
+  const q = query(collection(db, 'actividades_plan'), where('asesoria', '==', email));
+
+  unsubscribeActividades = onSnapshot(q, (snapshot) => {
+    if (snapshot.empty) {
+      tabla.style.display = 'none';
+      vacioMsg.style.display = 'block';
+      tablaBody.innerHTML = '';
+      return;
+    }
+    vacioMsg.style.display = 'none';
+    tabla.style.display = 'table';
+    tablaBody.innerHTML = '';
+
+    snapshot.forEach((docSnap) => {
+      const a = docSnap.data();
+      const id = docSnap.id;
+      tablaBody.appendChild(filaActividad(id, a));
+      tablaBody.appendChild(filaDetalle(id, a));
+    });
+  }, (err) => {
+    console.error(err);
+    mostrarToast('No se pudieron cargar las actividades.');
+  });
+}
+
+function estadoPill(a) {
+  if (a.finalizado) return `<span class="estado-pill verde"><span class="dot"></span>Finalizada</span>`;
+  if (a.addToCal) return `<span class="estado-pill azul"><span class="dot"></span>Agendada</span>`;
+  if (!a.docEntregada) return `<span class="estado-pill naranja"><span class="dot"></span>Falta díptico</span>`;
+  return `<span class="estado-pill gris"><span class="dot"></span>Sin planificar</span>`;
+}
+
+function filaActividad(id, a) {
+  const tr = document.createElement('tr');
+  tr.className = 'fila-actividad';
+  tr.dataset.id = id;
+  const sesiones = Array.isArray(a.sesiones) ? a.sesiones.length : 0;
+  tr.innerHTML = `
+    <td>${a.trimestre || '—'}</td>
+    <td>${a.nombre || '(sin nombre)'}</td>
+    <td>${a.destinatarios || '—'}</td>
+    <td>${a.inscripcionInicio || '—'}</td>
+    <td>${sesiones ? sesiones + ' sesión(es)' : '—'}</td>
+    <td>${estadoPill(a)}</td>
+    <td>
+      <div class="acciones-fila">
+        <button class="icon-btn peligro" data-borrar="${id}" title="Eliminar actividad">🗑</button>
+      </div>
+    </td>
+  `;
+  tr.addEventListener('click', (e) => {
+    if (e.target.closest('[data-borrar]')) return;
+    const detalle = document.querySelector(`.fila-detalle[data-id="${id}"]`);
+    if (detalle) detalle.classList.toggle('oculta');
+  });
+  return tr;
+}
+
+function filaDetalle(id, a) {
+  const tr = document.createElement('tr');
+  tr.className = 'fila-detalle oculta';
+  tr.dataset.id = id;
+  const sesionesTxt = Array.isArray(a.sesiones) && a.sesiones.length ? a.sesiones.join(', ') : '—';
+  const contactosTxt = Array.isArray(a.contactos) && a.contactos.length ? a.contactos.join(', ') : '—';
+  tr.innerHTML = `
+    <td colspan="7">
+      <div class="detalle-grid">
+        <div class="campo"><span class="label">Financiación</span>${a.financiacion || '—'}</div>
+        <div class="campo"><span class="label">Aula</span>${a.aula || '—'}</div>
+        <div class="campo"><span class="label">Horas</span>${a.horas || '—'}</div>
+        <div class="campo"><span class="label">Fin inscripción</span>${a.inscripcionFin || '—'}</div>
+        <div class="campo"><span class="label">Publicación admitidos</span>${a.publicacionAdmitidos || '—'}</div>
+        <div class="campo"><span class="label">Sesiones</span>${sesionesTxt}</div>
+        <div class="campo"><span class="label">Díptico entregado</span>${a.docEntregada ? 'Sí' : 'No'}</div>
+        <div class="campo"><span class="label">Pegatina impresa</span>${a.pegatinaImpresa ? 'Sí' : 'No'}</div>
+        <div class="campo"><span class="label">Contactos</span>${contactosTxt}</div>
+      </div>
+    </td>
+  `;
+  return tr;
+}
+
+// === Borrar actividad (delegación de eventos) ===
+tablaBody.addEventListener('click', async (e) => {
+  const btn = e.target.closest('[data-borrar]');
+  if (!btn) return;
+  const id = btn.dataset.borrar;
+  const ok = confirm('¿Seguro que quieres eliminar esta actividad? Esta acción no se puede deshacer.');
+  if (!ok) return;
+  try {
+    await deleteDoc(doc(db, 'actividades_plan', id));
+    mostrarToast('Actividad eliminada.');
+  } catch (err) {
+    console.error(err);
+    mostrarToast('No se pudo eliminar la actividad.');
+  }
+});
+
+// === Nueva actividad (formulario real: próxima fase) ===
+btnNueva.addEventListener('click', () => {
+  alert('El formulario de nueva actividad lo construimos en la siguiente fase. Por ahora puedes usar "Crear actividad de prueba" para ver la tabla en acción.');
+});
+
+// === Actividad de prueba (temporal, solo para validar la tabla) ===
+btnPrueba.addEventListener('click', async () => {
+  if (!window.usuarioActual) return;
+  try {
+    await addDoc(collection(db, 'actividades_plan'), {
+      asesoria: window.usuarioActual.email,
+      asesoriaNombre: window.usuarioActual.asesoria,
+      trimestre: '1º Trimestre',
+      numActividad: 'PRUEBA-01',
+      nombre: 'Actividad de prueba',
+      destinatarios: 'Profesorado de Primaria',
+      financiacion: 'Plan Regional',
+      publicadaWeb: false,
+      inscripcionInicio: '2026-09-15',
+      inscripcionFin: '2026-09-30',
+      publicacionAdmitidos: '2026-10-02',
+      inicioActividad: '2026-10-10',
+      addToCal: false,
+      status: '',
+      finalizado: false,
+      horas: 20,
+      sesiones: ['2026-10-10', '2026-10-17'],
+      docEntregada: false,
+      pegatinaImpresa: false,
+      aula: 'Aula 2',
+      contactos: [window.usuarioActual.asesoria],
+      eventIds: {},
+      lastSync: null,
+      creadoEn: serverTimestamp(),
+      actualizadoEn: serverTimestamp()
+    });
+    mostrarToast('Actividad de prueba creada.');
+  } catch (err) {
+    console.error(err);
+    mostrarToast('No se pudo crear. Revisa las reglas de Firestore.');
+  }
 });
 </script>
 
