@@ -503,12 +503,17 @@ function filaDetalle(id, a) {
   tr.innerHTML = `
     <td colspan="7">
       <div class="detalle-grid">
+        <div class="campo"><span class="label">Nº actividad</span>${a.numActividad || '—'}</div>
         <div class="campo"><span class="label">Financiación</span>${a.financiacion || '—'}</div>
+        <div class="campo"><span class="label">Publicada en web</span>${a.publicadaWeb ? 'Sí' : 'No'}</div>
         <div class="campo"><span class="label">Aula</span>${a.aula || '—'}</div>
         <div class="campo"><span class="label">Horas</span>${a.horas || '—'}</div>
         <div class="campo"><span class="label">Fin inscripción</span>${a.inscripcionFin || '—'}</div>
         <div class="campo"><span class="label">Publicación admitidos</span>${a.publicacionAdmitidos || '—'}</div>
+        <div class="campo"><span class="label">Inicio de actividad</span>${a.inicioActividad || '—'}</div>
         <div class="campo"><span class="label">Sesiones</span>${sesionesTxt}</div>
+        <div class="campo"><span class="label">Añadida al calendario</span>${a.addToCal ? 'Sí' : 'No'}</div>
+        <div class="campo"><span class="label">Estado (texto)</span>${a.status || '—'}</div>
         <div class="campo"><span class="label">Díptico entregado</span>${a.docEntregada ? 'Sí' : 'No'}</div>
         <div class="campo"><span class="label">Pegatina impresa</span>${a.pegatinaImpresa ? 'Sí' : 'No'}</div>
         <div class="campo"><span class="label">Contactos</span>${contactosTxt}</div>
